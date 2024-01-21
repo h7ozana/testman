@@ -31,7 +31,7 @@ spec:
   selector:
     app: flasktest
   ports:
-    - port: 8888
+    - port: 443
       targetPort: 888
 ---
 
@@ -59,4 +59,4 @@ spec:
               service:
                 name: flask-service
                 port:
-                  number: 8888
+                  number: 443
