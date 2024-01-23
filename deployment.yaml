@@ -1,6 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  creationTimestamp: null
   namespace: test
   name: flasktest
 spec:
@@ -17,46 +18,19 @@ spec:
         - name: flasktest
           image: stayc/test:latest
           imagePullPolicy: Always
-          ports:
-            - protocol: TCP
-              containerPort: 888
-
+          resources: {}
 ---
 apiVersion: v1
 kind: Service
 metadata:
   namespace: test
-  name: flask-service
+  name: lb-service
+  labels:
+    app: lb-service
 spec:
+  type: LoadBalancer
   selector:
     app: flasktest
   ports:
-    - port: 443
-      targetPort: 888
----
-
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  namespace: test
-  name: ingress
-  annotations:
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/load-balancer-name: flasktest-lb  
-    alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
-    alb.ingress.kubernetes.io/actions.redirect-to-https: '{"Type":"redirect","RedirectConfig":{"Port":"443","Protocol":"HTTPS","StatusCode":"HTTP_302"}}'
-    external-dns.alpha.kubernetes.io/hostname: backend.kazuha.click
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:589634832240:certificate/640910ed-71a0-40e6-b43f-5548ee26a438
-spec:
-  ingressClassName: alb
-  rules:
-    - http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: flask-service
-                port:
-                  number: 443
+    - port: 80
+      targetPort: 5000
