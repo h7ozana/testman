@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   creationTimestamp: null
-  namespace: test
   name: flasktest
 spec:
   replicas: 3
@@ -23,7 +22,6 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: test
   name: lb-service
   labels:
     app: lb-service
