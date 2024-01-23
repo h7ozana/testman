@@ -1,31 +1,34 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: lb-service
+  creationTimestamp: null
+  name: flasktest
 spec:
-  replicas: 1
-  revisionHistoryLimit: 3
+  replicas: 3
   selector:
     matchLabels:
-      app: lb-service
+      app: flasktest
   template:
     metadata:
       labels:
-        app: lb-service
+        app: flasktest
     spec:
       containers:
-      - image: stayc/test:1
-        name: lb-service
-        ports:
-        - containerPort: 80
+        - name: flasktest
+          image: stayc/test:1
+          imagePullPolicy: Always
+          resources: {}
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: lb-service
-spec:
-  ports:
-  - port: 80
-    targetPort: 80
-  selector:
+  labels:
     app: lb-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: flasktest
+  ports:
+    - port: 80
+      targetPort: 5000
