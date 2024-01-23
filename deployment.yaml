@@ -4,7 +4,7 @@ metadata:
   creationTimestamp: null
   name: flasktest
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: flasktest
