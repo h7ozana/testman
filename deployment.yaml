@@ -19,19 +19,28 @@ spec:
           imagePullPolicy: Always
           resources: {}
 ---
-apiVersion: v1
-kind: Service
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
-  name: lb-service
-  labels:
-    app: lb-service
+  namespace: test
+  name: test-ingress
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/load-balancer-name: test-alb
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}, {"HTTPS": 8000}]'
 spec:
-  type: LoadBalancer
-  selector:
-    app: flasktest
-  ports:
-    - port: 80
-      targetPort: 5000
+  ingressClassName: alb
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: flasktest
+            port:
+              number: 80
 
 
 
