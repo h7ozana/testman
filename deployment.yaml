@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: flasktest
-          image: stayc/test:4
+          image: stayc/test:5
           imagePullPolicy: Always
           resources: {}
 ---
