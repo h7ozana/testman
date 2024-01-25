@@ -18,9 +18,7 @@ spec:
           image: stayc/test:16
           imagePullPolicy: Always
           resources: {}
-
-
-
+---
 apiVersion: v1
 kind: Service
 metadata:
