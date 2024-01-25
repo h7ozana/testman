@@ -25,6 +25,8 @@ metadata:
   name: lb-service
   labels:
     app: lb-service
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "alb"
 spec:
   type: LoadBalancer
   selector:
